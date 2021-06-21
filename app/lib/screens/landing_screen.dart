@@ -1,6 +1,7 @@
 import 'package:app/models.dart';
 import 'package:app/widgets/chart.dart';
 import 'package:flutter/material.dart';
+import 'package:app/widgets/calculate.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({Key? key}) : super(key: key);
