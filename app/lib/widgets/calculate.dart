@@ -1,12 +1,12 @@
 import 'package:app/models.dart';
 
 class WeightedAverage {
-  static Option findSelectedOption(
-    List<Option> options,
+  static WheelDocOption findSelectedOption(
+    List<WheelDocOption> options,
     double percent,
   ) {
-    // add validation that group has options
-    // and percent is between 0.0 and 1.0
+    // test: add validation that group has options
+    // test: and percent is between 0.0 and 1.0
 
     var sum = options
         .map((a) => a.weight)

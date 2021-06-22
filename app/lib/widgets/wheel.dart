@@ -23,6 +23,8 @@ class _WheelState extends State<Wheel> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final wheelState = Provider.of<WheelState>(context);
+    final wheelDoc = Provider.of<WheelDoc?>(context);
+
     final shouldSpin = _wheelState != null && wheelState.spin != _lastSpin;
 
     if (shouldSpin) {

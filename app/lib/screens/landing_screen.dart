@@ -7,20 +7,21 @@ import 'package:random_color/random_color.dart';
 class LandingScreen extends StatelessWidget {
   LandingScreen({Key? key}) : super(key: key);
 
-  // TODO: Move this into firestore
+  final WheelService _wheelService = WheelService();
+
   final wheelState = WheelState(
     options: [
-      Option(
-        color: RandomColor().randomMaterialColor(),
+      WheelDocOption(
+        color: Colors.brown[800]!,
         label: "ARAM",
         weight: 1,
       ),
-      Option(
+      WheelDocOption(
         color: RandomColor().randomMaterialColor(),
         label: "GeoGuesser",
         weight: 1,
       ),
-      Option(
+      WheelDocOption(
         color: RandomColor().randomMaterialColor(),
         label: "Choice",
         weight: 1,
@@ -32,8 +33,19 @@ class LandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        body: ChangeNotifierProvider<WheelState>(
-          create: (_) => wheelState,
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<WheelState>(
+              create: (_) => wheelState,
+            ),
+            Provider<WheelService>(
+              create: (_) => _wheelService,
+            ),
+            StreamProvider<WheelDoc?>.value(
+              value: _wheelService.stream(),
+              initialData: null,
+            ),
+          ],
           child: Column(
             children: [
               ElevatedButton(
