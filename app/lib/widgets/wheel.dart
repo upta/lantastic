@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class Wheel extends StatefulWidget {
   Wheel({
     Key? key,
-  }) : super(key: key) {}
+  }) : super(key: key);
 
   @override
   _WheelState createState() => _WheelState();
@@ -14,26 +14,34 @@ class Wheel extends StatefulWidget {
 
 class _WheelState extends State<Wheel> {
   late List<PieChartSectionData> _sections;
-  WheelState? _wheelState;
 
   double _rotation = 0.0;
   double _lastSpin = -1.0;
+  String _selected = "";
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final wheelState = Provider.of<WheelState>(context);
-    final wheelDoc = Provider.of<WheelDoc?>(context);
+    final wheelDoc = Provider.of<WheelDoc>(context);
 
-    final shouldSpin = _wheelState != null && wheelState.spin != _lastSpin;
+    final shouldSpin = wheelDoc.spin != _lastSpin;
 
     if (shouldSpin) {
-      spin(wheelState.spin);
-      _lastSpin = wheelState.spin;
+      spin(wheelDoc.spin);
+      _lastSpin = wheelDoc.spin;
     }
 
-    _wheelState = wheelState;
-    updateSections();
+    _selected = wheelDoc.selected?.label ?? "Nothing Selected";
+
+    _sections = wheelDoc.options
+        .map(
+          (e) => PieChartSectionData(
+            color: e.color,
+            value: e.weight,
+            title: e.label,
+          ),
+        )
+        .toList();
   }
 
   @override
@@ -42,7 +50,7 @@ class _WheelState extends State<Wheel> {
       child: Column(
         children: [
           Text(
-            _wheelState?.selected?.label ?? "Nothing Selected",
+            _selected,
           ),
           Expanded(
             child: TweenAnimationBuilder(
@@ -73,17 +81,5 @@ class _WheelState extends State<Wheel> {
 
       _rotation += adjustment + (720 - (percent * 360));
     });
-  }
-
-  void updateSections() {
-    _sections = _wheelState!.options
-        .map(
-          (e) => PieChartSectionData(
-            color: e.color,
-            value: e.weight,
-            title: e.label,
-          ),
-        )
-        .toList();
   }
 }
