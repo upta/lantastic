@@ -4,6 +4,7 @@ import 'package:app/widgets/calculate.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 
 @immutable
 class WheelDocOption {
@@ -70,7 +71,12 @@ class WheelService {
   Stream<WheelDoc> stream(
     String wheelId,
   ) {
-    return _db.doc("wheels/$wheelId").snapshots().map(
+    return _db
+        .doc(
+          "wheels/$wheelId",
+        )
+        .snapshots()
+        .map(
           (a) => WheelDoc.fromMap(
             id: a.id,
             data: a.data() as Map<String, dynamic>,
@@ -87,7 +93,11 @@ class WheelService {
       spin,
     );
 
-    await _db.doc("wheels/${wheel.id}").set(
+    await _db
+        .doc(
+          "wheels/${wheel.id}",
+        )
+        .set(
           Map<String, dynamic>.from({
             "selected": selected.label,
             "spin": spin,
@@ -101,11 +111,15 @@ class WheelService {
   Future adjustWeights(
     WheelDoc wheel,
   ) async {
-    await _db.doc("wheels/${wheel.id}").set(
+    await _db
+        .doc(
+          "wheels/${wheel.id}",
+        )
+        .set(
           Map<String, dynamic>.from({
             "options": wheel.options.map(
               (a) => {
-                "color": "#${a.color.value.toRadixString(16)}",
+                "color": colorToHex(a.color),
                 "label": a.label,
                 "weight": a.weight * (a != wheel.selected ? 2.5 : 1),
               },
@@ -118,26 +132,32 @@ class WheelService {
   }
 
   void seed() async {
-    await _db.doc("wheels/main").set(Map<String, dynamic>.from({
-          "selected": null,
-          "spin": 0.0,
-          "options": [
+    await _db.doc("wheels/main").set(
+          Map<String, dynamic>.from(
             {
-              "color": "#FF0000",
-              "label": "Aram",
-              "weight": 1,
+              "selected": null,
+              "spin": 0.0,
+              "options": [
+                {
+                  "color": colorToHex(Colors.blueAccent),
+                  "label": "Aram",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.greenAccent),
+                  "label": "GeoGuessr",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.redAccent),
+                  "label": "Choice",
+                  "weight": 1,
+                },
+              ]
             },
-            {
-              "color": "#00FF00",
-              "label": "GeoGuessr",
-              "weight": 1,
-            },
-            {
-              "color": "#0000FF",
-              "label": "Choice",
-              "weight": 1,
-            },
-          ]
-        }));
+          ),
+        );
   }
+
+  String colorToHex(Color color) => "#${color.value.toRadixString(16)}";
 }

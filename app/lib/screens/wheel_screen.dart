@@ -28,25 +28,28 @@ class WheelScreen extends StatelessWidget {
 
             return Provider<WheelDoc>.value(
               value: wheel,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async => await wheelService.roll(wheel),
-                    child: Text("roll"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async =>
-                        await wheelService.adjustWeights(wheel),
-                    child: Text("wigeth"),
-                  ),
-                  ElevatedButton(
-                    onPressed: wheelService.seed,
-                    child: Text("seedith"),
-                  ),
-                  Expanded(
-                    child: Wheel(),
-                  ),
-                ],
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async => await wheelService.roll(wheel),
+                      child: Text("roll"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async =>
+                          await wheelService.adjustWeights(wheel),
+                      child: Text("wigeth"),
+                    ),
+                    ElevatedButton(
+                      onPressed: wheelService.seed,
+                      child: Text("seedith"),
+                    ),
+                    Expanded(
+                      child: Wheel(),
+                    ),
+                  ],
+                ),
               ),
             );
           },

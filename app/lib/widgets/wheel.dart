@@ -24,21 +24,30 @@ class _WheelState extends State<Wheel> {
     super.didChangeDependencies();
     final wheelDoc = Provider.of<WheelDoc>(context);
 
-    final shouldSpin = wheelDoc.spin != _lastSpin;
+    final shouldSpin = _lastSpin != -1.0 && wheelDoc.spin != _lastSpin;
 
     if (shouldSpin) {
       spin(wheelDoc.spin);
-      _lastSpin = wheelDoc.spin;
     }
 
+    _lastSpin = wheelDoc.spin;
     _selected = wheelDoc.selected?.label ?? "Nothing Selected";
-
     _sections = wheelDoc.options
         .map(
           (e) => PieChartSectionData(
             color: e.color,
             value: e.weight,
             title: e.label,
+            titleStyle: Theme.of(context).textTheme.headline5!.copyWith(
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 1.0,
+                  color: Colors.grey.shade900,
+                ),
+              ],
+            ),
           ),
         )
         .toList();
@@ -53,21 +62,55 @@ class _WheelState extends State<Wheel> {
             _selected,
           ),
           Expanded(
-            child: TweenAnimationBuilder(
-              curve: Curves.easeInOut,
-              duration: Duration(seconds: 3),
-              tween: Tween<double>(
-                begin: 0.0,
-                end: _rotation,
-              ),
-              builder: (_, double angle, __) {
-                return PieChart(
-                  PieChartData(
-                    sections: _sections,
-                    startDegreeOffset: angle,
+            child: Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: Padding(
+                    padding: EdgeInsets.all(42.0),
+                    child: TweenAnimationBuilder(
+                      curve: Curves.easeInOut,
+                      duration: Duration(seconds: 3),
+                      tween: Tween<double>(
+                        begin: 0.0,
+                        end: _rotation,
+                      ),
+                      builder: (_, double angle, __) {
+                        return PieChart(
+                          PieChartData(
+                            sections: _sections,
+                            startDegreeOffset: angle,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.arrow_right,
+                          color: Colors.orange,
+                          size: 60.0,
+                        ),
+                        SizedBox(
+                          width: 4.0,
+                        ),
+                        Icon(
+                          Icons.arrow_left,
+                          color: Colors.orange,
+                          size: 60.0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
