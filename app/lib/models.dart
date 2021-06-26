@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 @immutable
 class WheelDocOption {
   WheelDocOption({
+    required this.child,
     required this.color,
     required this.label,
     required this.weight,
@@ -17,11 +18,13 @@ class WheelDocOption {
   WheelDocOption.fromMap(
     Map data,
   ) {
+    child = data["child"];
     color = _hexStringToColor(data["color"]);
     label = data["label"];
     weight = data["weight"];
   }
 
+  late final String? child;
   late final Color color;
   late final String label;
   late final double weight;
@@ -119,6 +122,7 @@ class WheelService {
           Map<String, dynamic>.from({
             "options": wheel.options.map(
               (a) => {
+                "child": a.child,
                 "color": colorToHex(a.color),
                 "label": a.label,
                 "weight": a.weight * (a != wheel.selected ? 2.5 : 1),
@@ -139,6 +143,7 @@ class WheelService {
               "spin": 0.0,
               "options": [
                 {
+                  "child": "aram",
                   "color": colorToHex(Colors.blueAccent),
                   "label": "Aram",
                   "weight": 1,
@@ -149,8 +154,91 @@ class WheelService {
                   "weight": 1,
                 },
                 {
+                  "child": "choice",
                   "color": colorToHex(Colors.redAccent),
                   "label": "Choice",
+                  "weight": 1,
+                },
+              ]
+            },
+          ),
+        );
+
+    await _db.doc("wheels/choice").set(
+          Map<String, dynamic>.from(
+            {
+              "selected": null,
+              "spin": 0.0,
+              "options": [
+                {
+                  "color": colorToHex(Colors.blueAccent),
+                  "label": "Brian",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.greenAccent),
+                  "label": "Chris",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.redAccent),
+                  "label": "Dave",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.brown),
+                  "label": "James",
+                  "weight": 1,
+                },
+              ]
+            },
+          ),
+        );
+
+    await _db.doc("wheels/aram").set(
+          Map<String, dynamic>.from(
+            {
+              "selected": null,
+              "spin": 0.0,
+              "options": [
+                {
+                  "color": colorToHex(Colors.blueAccent),
+                  "label": "Most Kills",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.greenAccent),
+                  "label": "Most Assist",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.redAccent),
+                  "label": "Most Damage to Champions",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.yellowAccent.shade400),
+                  "label": "Most Gold",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.blueAccent),
+                  "label": "Most Damage Overall",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.greenAccent),
+                  "label": "KDA",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.redAccent),
+                  "label": "Most Damage Mitigated",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.brown),
+                  "label": "Creep Score",
                   "weight": 1,
                 },
               ]

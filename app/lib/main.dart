@@ -28,10 +28,14 @@ class App extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => WheelScreen(
-                wheelId: "main",
+                wheelId:
+                    (ModalRoute.of(context)?.settings.arguments as String?) ??
+                        "main",
               ),
         },
       ),
     );
   }
 }
+// create one of the sub wheels
+// navigate to sub wheel, or main wheel page with new parameters

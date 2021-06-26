@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 class Wheel extends StatefulWidget {
   Wheel({
     Key? key,
+    this.onSpinEnd,
   }) : super(key: key);
+
+  final VoidCallback? onSpinEnd;
 
   @override
   _WheelState createState() => _WheelState();
@@ -58,9 +61,6 @@ class _WheelState extends State<Wheel> {
     return Container(
       child: Column(
         children: [
-          Text(
-            _selected,
-          ),
           Expanded(
             child: Stack(
               children: [
@@ -71,6 +71,7 @@ class _WheelState extends State<Wheel> {
                     child: TweenAnimationBuilder(
                       curve: Curves.easeInOut,
                       duration: Duration(seconds: 3),
+                      onEnd: widget.onSpinEnd,
                       tween: Tween<double>(
                         begin: 0.0,
                         end: _rotation,
