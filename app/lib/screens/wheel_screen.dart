@@ -49,8 +49,9 @@ class WheelScreen extends StatelessWidget {
                         children: [
                           Wheel(
                             onSpinEnd: () async {
-                              _labelKey.currentState?._controller
-                                  .forward(from: 0.0);
+                              _labelKey.currentState?._controller.forward(
+                                  from:
+                                      0.0); // do it using didChangeDependencies
                               await Future.delayed(Duration(seconds: 3));
 
                               if (wheel.selected!.child != null) {
