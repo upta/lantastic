@@ -1,4 +1,4 @@
-import 'package:app/models.dart';
+import 'package:app/data.dart';
 
 class WeightedAverage {
   static WheelDocOption findSelectedOption(

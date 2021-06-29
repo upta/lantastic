@@ -1,4 +1,4 @@
-import 'package:app/models.dart';
+import 'package:app/data.dart';
 import 'package:app/screens/wheel_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,11 +27,13 @@ class App extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => WheelScreen(
-                wheelId:
-                    (ModalRoute.of(context)?.settings.arguments as String?) ??
-                        "main",
-              ),
+          '/': (context) {
+            return WheelScreen(
+              wheelId:
+                  (ModalRoute.of(context)?.settings.arguments as String?) ??
+                      "main",
+            );
+          }
         },
       ),
     );

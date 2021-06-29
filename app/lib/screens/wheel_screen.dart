@@ -1,17 +1,24 @@
-import 'package:app/models.dart';
+import 'package:app/data.dart';
 import 'package:app/widgets/wheel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-class WheelScreen extends StatelessWidget {
+class WheelScreen extends StatefulWidget {
   WheelScreen({
     Key? key,
     required this.wheelId,
   }) : super(key: key);
 
   final String wheelId;
-  final _labelKey = GlobalKey<_SelectedLabelState>();
+
+  @override
+  _WheelScreenState createState() => _WheelScreenState();
+}
+
+class _WheelScreenState extends State<WheelScreen> {
+  bool _isSpinShown = true;
+  bool _isResultShown = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class WheelScreen extends StatelessWidget {
     return Container(
       child: Scaffold(
         body: StreamBuilder<WheelDoc?>(
-          stream: wheelService.stream(wheelId),
+          stream: wheelService.stream(widget.wheelId),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return Container();
@@ -35,11 +42,6 @@ class WheelScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // ElevatedButton(
-                    //   onPressed: () async =>
-                    //       await wheelService.adjustWeights(wheel),
-                    //   child: Text("wigeth"),
-                    // ),
-                    // ElevatedButton(
                     //   onPressed: wheelService.seed,
                     //   child: Text("seedith"),
                     // ),
@@ -49,10 +51,13 @@ class WheelScreen extends StatelessWidget {
                         children: [
                           Wheel(
                             onSpinEnd: () async {
-                              _labelKey.currentState?._controller.forward(
-                                  from:
-                                      0.0); // do it using didChangeDependencies
-                              await Future.delayed(Duration(seconds: 3));
+                              setState(() {
+                                _isResultShown = true;
+                              });
+
+                              await Future.delayed(Duration(seconds: 1));
+                              await wheelService.adjustWeights(wheel);
+                              await Future.delayed(Duration(seconds: 1));
 
                               if (wheel.selected!.child != null) {
                                 Navigator.of(context).pushNamed(
@@ -62,14 +67,27 @@ class WheelScreen extends StatelessWidget {
                               }
                             },
                           ),
-                          _SelectedLabel(
-                            key: _labelKey,
-                            label: wheel.selected?.label,
+                          AnimatedVisibility(
+                            child: Text(
+                              wheel.selected?.label ?? "",
+                              style: Theme.of(context).textTheme.headline2,
+                            ),
+                            isVisible: _isResultShown,
                           ),
-                          _SpinButton(
-                            onPressed: () async =>
-                                await wheelService.roll(wheel),
-                          ),
+                          AnimatedVisibility(
+                            child: IconButton(
+                              icon: const Icon(Icons.rotate_right),
+                              color: Colors.white70,
+                              iconSize: 120.0,
+                              onPressed: () async {
+                                setState(() {
+                                  _isSpinShown = false;
+                                });
+                                await wheelService.roll(wheel);
+                              },
+                            ),
+                            isVisible: _isSpinShown,
+                          )
                         ],
                       ),
                     ),
@@ -84,24 +102,21 @@ class WheelScreen extends StatelessWidget {
   }
 }
 
-class _SelectedLabel extends StatefulWidget {
-  _SelectedLabel({
+class AnimatedVisibility extends StatefulWidget {
+  AnimatedVisibility({
     Key? key,
-    required this.label,
+    required this.child,
+    required this.isVisible,
   }) : super(key: key);
 
-  final String? label;
-  final _state = _SelectedLabelState();
-
-  void show() {
-    _state._controller.forward(from: 0.0);
-  }
+  final Widget child;
+  final bool isVisible;
 
   @override
-  _SelectedLabelState createState() => _state;
+  _AnimatedVisibilityState createState() => _AnimatedVisibilityState();
 }
 
-class _SelectedLabelState extends State<_SelectedLabel>
+class _AnimatedVisibilityState extends State<AnimatedVisibility>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -109,14 +124,16 @@ class _SelectedLabelState extends State<_SelectedLabel>
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 750),
       vsync: this,
-      value: 1.0,
+      value: widget.isVisible ? 1.0 : 0.0,
     );
+
     _animation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInExpo,
+      curve: Curves.easeInOutQuart,
     );
   }
 
@@ -127,50 +144,16 @@ class _SelectedLabelState extends State<_SelectedLabel>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      alignment: Alignment.center,
-      child: Text(widget.label ?? ""),
-    );
-  }
-}
+  didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-class _SpinButton extends StatefulWidget {
-  const _SpinButton({
-    Key? key,
-    required this.onPressed,
-  }) : super(key: key);
-
-  final VoidCallback? onPressed;
-
-  @override
-  _SpinButtonState createState() => _SpinButtonState();
-}
-
-class _SpinButtonState extends State<_SpinButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-      value: 1.0,
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInExpo,
-    );
-  }
-
-  @override
-  dispose() {
-    _controller.dispose();
-    super.dispose();
+    if (oldWidget.isVisible != widget.isVisible) {
+      if (widget.isVisible) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
   }
 
   @override
@@ -178,17 +161,7 @@ class _SpinButtonState extends State<_SpinButton>
     return ScaleTransition(
       scale: _animation,
       alignment: Alignment.center,
-      child: IconButton(
-        icon: const Icon(Icons.accessible_forward_sharp),
-        color: Colors.purpleAccent,
-        iconSize: 120.0,
-        onPressed: () {
-          setState(() {
-            widget.onPressed!();
-            _controller.reverse();
-          });
-        },
-      ),
+      child: widget.child,
     );
   }
 }

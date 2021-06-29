@@ -1,4 +1,4 @@
-import 'package:app/models.dart';
+import 'package:app/data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,6 @@ class _WheelState extends State<Wheel> {
 
   double _rotation = 0.0;
   double _lastSpin = -1.0;
-  String _selected = "";
 
   @override
   void didChangeDependencies() {
@@ -34,7 +33,6 @@ class _WheelState extends State<Wheel> {
     }
 
     _lastSpin = wheelDoc.spin;
-    _selected = wheelDoc.selected?.label ?? "Nothing Selected";
     _sections = wheelDoc.options
         .map(
           (e) => PieChartSectionData(
