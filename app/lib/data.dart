@@ -171,23 +171,23 @@ class WheelService {
               "spin": 0.0,
               "options": [
                 {
-                  "color": colorToHex(Colors.blueAccent),
+                  "color": colorToHex(Colors.blueAccent.shade700),
                   "label": "Brian",
                   "weight": 1,
                 },
                 {
-                  "color": colorToHex(Colors.greenAccent),
+                  "color": colorToHex(Colors.orangeAccent.shade700),
                   "label": "Chris",
                   "weight": 1,
                 },
                 {
-                  "color": colorToHex(Colors.redAccent),
-                  "label": "Dave",
+                  "color": colorToHex(Colors.greenAccent.shade700),
+                  "label": "James",
                   "weight": 1,
                 },
                 {
-                  "color": colorToHex(Colors.brown),
-                  "label": "James",
+                  "color": colorToHex(Colors.redAccent.shade700),
+                  "label": "Dave",
                   "weight": 1,
                 },
               ]
@@ -202,42 +202,42 @@ class WheelService {
               "spin": 0.0,
               "options": [
                 {
-                  "color": colorToHex(Colors.blueAccent),
-                  "label": "Most Kills",
-                  "weight": 1,
-                },
-                {
-                  "color": colorToHex(Colors.greenAccent),
-                  "label": "Most Assist",
-                  "weight": 1,
-                },
-                {
-                  "color": colorToHex(Colors.redAccent),
-                  "label": "Most Damage to Champions",
-                  "weight": 1,
-                },
-                {
-                  "color": colorToHex(Colors.yellowAccent.shade400),
-                  "label": "Most Gold",
-                  "weight": 1,
-                },
-                {
-                  "color": colorToHex(Colors.blueAccent),
-                  "label": "Most Damage Overall",
-                  "weight": 1,
-                },
-                {
-                  "color": colorToHex(Colors.greenAccent),
+                  "color": colorToHex(Colors.cyanAccent.shade400),
                   "label": "KDA",
                   "weight": 1,
                 },
                 {
-                  "color": colorToHex(Colors.redAccent),
-                  "label": "Most Damage Mitigated",
+                  "color": colorToHex(Colors.orangeAccent.shade400),
+                  "label": "Assists",
                   "weight": 1,
                 },
                 {
-                  "color": colorToHex(Colors.brown),
+                  "color": colorToHex(Colors.tealAccent.shade400),
+                  "label": "Damage to Champions",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.limeAccent.shade700),
+                  "label": "Damage Overall",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.pinkAccent.shade400),
+                  "label": "Kills",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.indigoAccent.shade400),
+                  "label": "Damage Mitigated",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.yellowAccent.shade700),
+                  "label": "Gold",
+                  "weight": 1,
+                },
+                {
+                  "color": colorToHex(Colors.purpleAccent.shade200),
                   "label": "Creep Score",
                   "weight": 1,
                 },

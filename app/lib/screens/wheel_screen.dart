@@ -1,7 +1,6 @@
 import 'package:app/data.dart';
 import 'package:app/widgets/wheel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class WheelScreen extends StatefulWidget {
@@ -41,9 +40,20 @@ class _WheelScreenState extends State<WheelScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // ElevatedButton(
+                    // OutlinedButton(
                     //   onPressed: wheelService.seed,
                     //   child: Text("seedith"),
+                    //   style: OutlinedButton.styleFrom(
+                    //     primary: Colors.white,
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 15,
+                    //       horizontal: 20,
+                    //     ),
+                    //     textStyle:
+                    //         Theme.of(context).textTheme.headline6!.copyWith(
+                    //               fontWeight: FontWeight.w300,
+                    //             ),
+                    //   ),
                     // ),
                     Expanded(
                       child: Stack(
@@ -68,9 +78,44 @@ class _WheelScreenState extends State<WheelScreen> {
                             },
                           ),
                           AnimatedVisibility(
-                            child: Text(
-                              wheel.selected?.label ?? "",
-                              style: Theme.of(context).textTheme.headline2,
+                            child: Column(
+                              children: [
+                                Text(
+                                  wheel.selected?.label ?? "",
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                if (wheel.selected?.child == null)
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pushNamed(
+                                            "/",
+                                          );
+                                        },
+                                        child: Text("Next Game"),
+                                        style: OutlinedButton.styleFrom(
+                                          primary: Colors.white,
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 15,
+                                            horizontal: 20,
+                                          ),
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .headline6!
+                                              .copyWith(
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                    mainAxisSize: MainAxisSize.min,
+                                  ),
+                              ],
+                              mainAxisSize: MainAxisSize.min,
                             ),
                             isVisible: _isResultShown,
                           ),

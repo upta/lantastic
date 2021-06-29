@@ -39,13 +39,13 @@ class _WheelState extends State<Wheel> {
             color: e.color,
             value: e.weight,
             title: e.label,
-            titleStyle: Theme.of(context).textTheme.headline5!.copyWith(
+            titleStyle: Theme.of(context).textTheme.headline4!.copyWith(
               color: Colors.white,
               shadows: [
                 Shadow(
                   offset: Offset(1.0, 1.0),
                   blurRadius: 1.0,
-                  color: Colors.grey.shade900,
+                  color: Colors.black,
                 ),
               ],
             ),
