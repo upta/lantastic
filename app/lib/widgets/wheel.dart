@@ -1,4 +1,4 @@
-import 'package:app/data.dart';
+import 'package:app/data/models.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,7 @@ class _WheelState extends State<Wheel> {
     final shouldSpin = _lastSpin != -1.0 && wheelDoc.spin != _lastSpin;
 
     if (shouldSpin) {
-      spin(wheelDoc.spin);
+      _spin(wheelDoc.spin);
     }
 
     _lastSpin = wheelDoc.spin;
@@ -117,7 +117,7 @@ class _WheelState extends State<Wheel> {
     );
   }
 
-  void spin(double percent) {
+  void _spin(double percent) {
     setState(() {
       var adjustment = 360 - (_rotation % 360);
 

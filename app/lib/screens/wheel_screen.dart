@@ -1,4 +1,5 @@
-import 'package:app/data.dart';
+import 'package:app/data/models.dart';
+import 'package:app/data/wheel_service.dart';
 import 'package:app/widgets/wheel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,21 +41,6 @@ class _WheelScreenState extends State<WheelScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // OutlinedButton(
-                    //   onPressed: wheelService.seed,
-                    //   child: Text("seedith"),
-                    //   style: OutlinedButton.styleFrom(
-                    //     primary: Colors.white,
-                    //     padding: EdgeInsets.symmetric(
-                    //       vertical: 15,
-                    //       horizontal: 20,
-                    //     ),
-                    //     textStyle:
-                    //         Theme.of(context).textTheme.headline6!.copyWith(
-                    //               fontWeight: FontWeight.w300,
-                    //             ),
-                    //   ),
-                    // ),
                     Expanded(
                       child: Stack(
                         alignment: Alignment.center,
@@ -66,7 +52,9 @@ class _WheelScreenState extends State<WheelScreen> {
                               });
 
                               await Future.delayed(Duration(seconds: 1));
+
                               await wheelService.adjustWeights(wheel);
+
                               await Future.delayed(Duration(seconds: 1));
 
                               if (wheel.selected!.child != null) {
@@ -128,7 +116,7 @@ class _WheelScreenState extends State<WheelScreen> {
                                 setState(() {
                                   _isSpinShown = false;
                                 });
-                                await wheelService.roll(wheel);
+                                await wheelService.spin(wheel);
                               },
                             ),
                             isVisible: _isSpinShown,

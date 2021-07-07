@@ -1,4 +1,4 @@
-import 'package:app/data.dart';
+import 'package:app/data/wheel_service.dart';
 import 'package:app/screens/wheel_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,8 +13,6 @@ Future<void> main() async {
 }
 
 class App extends StatelessWidget {
-//  final WheelService _wheelService = WheelService();
-
   @override
   Widget build(BuildContext context) {
     return Provider(
@@ -39,5 +37,3 @@ class App extends StatelessWidget {
     );
   }
 }
-// create one of the sub wheels
-// navigate to sub wheel, or main wheel page with new parameters
